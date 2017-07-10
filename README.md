@@ -32,7 +32,7 @@ If you want to change the intervals maximum values, you have to change them from
 [Unity](https://www.unity3d.com)
 
 ## Authors
-Ettore Passaro, game developer at [GameBang](http://www.gamebang.it)
+[GameBang](http://www.gamebang.it) - [Contact us](info@gamebang.it)
 
 ## Licence
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

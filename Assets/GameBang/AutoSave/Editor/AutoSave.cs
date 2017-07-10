@@ -1,7 +1,7 @@
 ﻿/*
- * AutoSaves
+ * AutoSave
  *
- * Integration of AutoSave system for the Unity Editor.
+ * AutoSave system integration for the Unity Editor.
  *
  * Version:
  *   1.0
@@ -295,6 +295,8 @@ namespace Com.GameBang.Editor
                 {
                     EnableAutoSave();
                 }
+
+                Debug.Log("[AutoSaveBackup] " + GetInfo());
             }
         }
 
@@ -486,6 +488,14 @@ namespace Com.GameBang.Editor
             EnsureAutoSavePathExists();
             EditorApplication.update += OnUpdate;
             AutoSaveEnabled = true;
+
+            #if UNITY_EDITOR
+                if (Application.isEditor)
+                {
+                    // Enables the integration to work also when the Editor is running in background.
+                    Application.runInBackground = true;
+                }
+            #endif
 
             return GetInfo();
         }
