@@ -56,7 +56,7 @@ namespace Com.GameBang.Editor
         /// <summary>
         /// The default number of minutes that have to pass before an old backup gets deleted.
         /// </summary>
-        private const int DEFAULT_REMOVE_MINUTES = 60;
+        private const int DEFAULT_DELETE_MINUTES = 60;
 
 		// //////////////////////////////////////////////////////////////////////////////////// //
 		// If you want to augment the time ranges in the AutoSave preferences tab, modify the 	//
@@ -76,7 +76,7 @@ namespace Com.GameBang.Editor
         /// <summary>
         /// The maximum number of minutes that have to pass before an old backup gets deleted.
         /// </summary>
-        private const int MAX_REMOVE_MINUTES = 90;
+        private const int MAX_DELETE_MINUTES = 90;
 
 #endregion
 
@@ -87,7 +87,6 @@ namespace Com.GameBang.Editor
         /// The path is stored in the AutoSave_Folder EditorPrefs key.
         /// If the EditorPrefs key is an empty string, the value is set to the DEFAULT_SAVE_FOLDER path.
         /// </summary>
-        /// <returns></returns>
         public static string SaveFolder
         {
             get
@@ -111,7 +110,6 @@ namespace Com.GameBang.Editor
         /// The value is stored into the AutoSave_SaveMinutes EditoPrefs key.
         /// If the EditorPrefs key has a value of 0, the value is set to DEFAULT_SAVE_MINUTES.
         /// </summary>
-        /// <returns></returns>
         public static int SaveMinutes
         {
             get
@@ -135,7 +133,6 @@ namespace Com.GameBang.Editor
         /// The value is stored into the AutoSave_BackupMinutes EditorPrefs key.
         /// If the EditorPrefs key has a negative value, the value is set to DEFAULT_BACKUP_MINUTES.
         /// </summary>
-        /// <returns></returns>
         public static int BackupMinutes
         {
             get
@@ -156,25 +153,24 @@ namespace Com.GameBang.Editor
 
         /// <summary>
         /// The number of minutes that have to pass before an old backup gets deleted.
-        /// The value is stored into the AutoSave_RemoveMinutes EditorPrefs key.
-        /// If the EditorPrefs key has a negative value, the value is set to DEFAULT_REMOVE_MINUTES.
+        /// The value is stored into the AutoSave_DeleteMinutes EditorPrefs key.
+        /// If the EditorPrefs key has a negative value, the value is set to DEFAULT_DELETE_MINUTES.
         /// </summary>
-        /// <returns></returns>
-        public static int RemoveMinutes
+        public static int DeleteMinutes
         {
             get
             {
-                int current = EditorPrefs.GetInt("AutoSave_RemoveMinutes", -1);
+                int current = EditorPrefs.GetInt("AutoSave_DeleteMinutes", -1);
                 if (current < 0)
                 {
-                    current = DEFAULT_REMOVE_MINUTES;
-                    EditorPrefs.SetInt("AutoSave_RevmoeMinutes", current);
+                    current = DEFAULT_DELETE_MINUTES;
+                    EditorPrefs.SetInt("AutoSave_DeleteMinutes", current);
                 }
                 return current;
             }
             private set
             {
-                EditorPrefs.SetInt("AutoSave_RemoveMinutes", value);
+                EditorPrefs.SetInt("AutoSave_DeleteMinutes", value);
             }
         }
 
@@ -182,7 +178,6 @@ namespace Com.GameBang.Editor
         /// The flag that enables the AutoSave integration.
         /// The value is stored into the AutoSave_Enabled EditorPrefs key.
         /// </summary>
-        /// <returns></returns>
         public static bool AutoSaveEnabled
         {
             get
@@ -195,11 +190,26 @@ namespace Com.GameBang.Editor
             }
         }
 
+        /// <summary>
+        /// The flag that enables to AutoSave scenes when play is pressed.
+        /// The value is stored into the AutoSave_SaveAfterPlay EditorPrefs key.
+        /// </summary>
+        public static bool AutoSaveAfterPlay
+        {
+            get
+            {
+                return EditorPrefs.GetBool("AutoSave_SaveAfterPlay", true);
+            }
+            private set
+            {
+                EditorPrefs.SetBool("AutoSave_SaveAfterPlay", value);
+            }
+        }
+
 		/// <summary>
         /// The flag that enables the scene backups.
         /// The value is stored into the AutoSave_BackupEnabled EditorPrefs key.
         /// </summary>
-        /// <returns></returns>
 		public static bool BackupEnabled
 		{
 			get
@@ -213,21 +223,52 @@ namespace Com.GameBang.Editor
 		}
 
 		/// <summary>
-        /// The flag that enables the backup removal.
-        /// The value is stored into the AutoSave_RemoveEnabled EditorPrefs key.
+        /// The flag that enables the backup deletion.
+        /// The value is stored into the AutoSave_DeleteEnabled EditorPrefs key.
         /// </summary>
-        /// <returns></returns>
-		public static bool RemoveEnabled
+		public static bool DeleteEnabled
 		{
 			get
 			{
-				return EditorPrefs.GetBool("AutoSave_RemoveEnabled", true);
+				return EditorPrefs.GetBool("AutoSave_DeleteEnabled", true);
 			}
 			private set
 			{
-				EditorPrefs.SetBool("AutoSave_RemoveEnabled", value);
+				EditorPrefs.SetBool("AutoSave_DeleteEnabled", value);
 			}
 		}
+
+        /// <summary>
+        /// The flag that enables AutoSave to run while the Editor is running in background.
+        /// The value is stored into the AutoSave_EnabledInBackground EditorPrefs key.
+        /// </summary>
+        public static bool EnabledInBackground
+        {
+            get
+            {
+                return EditorPrefs.GetBool("AutoSave_EnabledInBackground", true);
+            }
+            private set
+            {
+                EditorPrefs.SetBool("AutoSave_EnabledInBackground", value);
+            }
+        }
+
+        /// <summary>
+        /// The flag that enables AutoSave to log info on the integration activities.
+        /// The value is stored into the AutoSave_LogInfo EditorPrefs key.
+        /// </summary>
+        public static bool LogInfo
+        {
+            get
+            {
+                return EditorPrefs.GetBool("AutoSave_LogInfo", true);
+            }
+            private set 
+            {
+                EditorPrefs.SetBool("AutoSave_LogInfo", value);
+            }
+        }
 
         /// <summary>
         /// The last time an AutoSave occurred.
@@ -235,7 +276,6 @@ namespace Com.GameBang.Editor
         /// to DATE_FORMAT.
         /// If the EditorPrefs key is equal to DateTime.MinValue, the value is set to DateTime.Now. 
         /// </summary>
-        /// <returns></returns>
         public static DateTime LastSaveTime
         {
             get
@@ -261,7 +301,6 @@ namespace Com.GameBang.Editor
         /// to DATE_FORMAT.
         /// If the EditorPrefs key is equal to DateTime.MinValue, the value is set to DateTime.Now. 
         /// </summary>
-        /// <returns></returns>
         public static DateTime LastBackupTime
         {
             get
@@ -285,7 +324,8 @@ namespace Com.GameBang.Editor
 
         /// <summary>
         /// The AutoSave static contructor.
-        /// It enables AutoSave if Enabled is true. This runs only on Unity Editor startup.
+        /// It enables AutoSave on Unity Editor startup if Enabled is true.
+        /// It saves the scenes when Play is pressed if AutoSaveAfterPlay is true.
         /// </summary>
         static AutoSave()
         {
@@ -297,6 +337,10 @@ namespace Com.GameBang.Editor
                 }
 
                 Debug.Log("[AutoSaveBackup] " + GetInfo());
+            }
+            else if (AutoSaveAfterPlay)
+            {
+                SaveScene();
             }
         }
 
@@ -310,10 +354,13 @@ namespace Com.GameBang.Editor
         {
             int save = SaveMinutes;
             int backup = BackupMinutes;
-            int remove = RemoveMinutes;
+            int delete = DeleteMinutes;
             bool en = AutoSaveEnabled;
+            bool splay = AutoSaveAfterPlay;
 			bool ben = BackupEnabled;
-			bool ren = RemoveEnabled;
+			bool den = DeleteEnabled;
+            bool bg = EnabledInBackground;
+            bool log = LogInfo;
             string folder = SaveFolder;
             string info = GetInfo();
 
@@ -321,22 +368,25 @@ namespace Com.GameBang.Editor
 
             GUILayout.Space(8);
 
-            en = EditorGUILayout.Toggle(new GUIContent("Enable Auto Save"), en);
-			ben = EditorGUILayout.Toggle(new GUIContent("Enable Scene Backups"), ben);
-			ren = EditorGUILayout.Toggle(new GUIContent("Enable Backup Removal"), ren);
+            en = EditorGUILayout.Toggle(new GUIContent("Enable AutoSave"), en);
+            splay = EditorGUILayout.Toggle(new GUIContent("Save when play is pressed"), splay);
+			ben = EditorGUILayout.Toggle(new GUIContent("Save scene backups"), ben);
+			den = EditorGUILayout.Toggle(new GUIContent("Auto-delete old backups"), den);
+            bg = EditorGUILayout.Toggle(new GUIContent("Run when Editor in background"), bg);
+            log = EditorGUILayout.Toggle(new GUIContent("Show AutoSave log"), log);
 
             GUILayout.Space(8);
 
-            folder = EditorGUILayout.TextField(new GUIContent("AutoSave Folder", 
+            folder = EditorGUILayout.TextField(new GUIContent("AutoSave folder", 
 												"Folder path. Must be inside the project folder."), folder);
             GUIStyle folderButtonStyle = new GUIStyle(GUI.skin.button);
             folderButtonStyle.fixedWidth = 100;
 
             // When the button is pressed, a FolderPanel is opened and the value is parsed to have
             // a valid path for the AutoSaves folder.
-            if (GUILayout.Button("Choose Folder", folderButtonStyle))
+            if (GUILayout.Button("Choose folder", folderButtonStyle))
             {
-                string f = EditorUtility.OpenFolderPanel("Select AutoSave Folder",
+                string f = EditorUtility.OpenFolderPanel("Select AutoSave folder",
                     Application.dataPath.Replace("/Assets", ""), "AutoSaves");
                 if (f == "")
                 {
@@ -367,32 +417,30 @@ namespace Com.GameBang.Editor
                 }
             }
 
-            GUILayout.Space(8);
-
 			EditorGUI.BeginDisabledGroup(!AutoSaveEnabled);
-            save = EditorGUILayout.IntSlider(new GUIContent("AutoSave Interval (minutes)", 
+            save = EditorGUILayout.IntSlider(new GUIContent("AutoSave interval (minutes)", 
 												"Time span between AutoSaves."), save, 1, MAX_SAVE_MINUTES);
 
 			EditorGUI.BeginDisabledGroup(!BackupEnabled);
-            backup = EditorGUILayout.IntSlider(new GUIContent("Backup Interval (minutes)", 
+            backup = EditorGUILayout.IntSlider(new GUIContent("Scene backup interval (minutes)", 
 												"Time span between scene backups."), 
 												backup, 1, MAX_BACKUP_MINUTES);
 			EditorGUI.EndDisabledGroup(); // BackupEnabled
 
-			EditorGUI.BeginDisabledGroup(!RemoveEnabled);
-            remove = EditorGUILayout.IntSlider(new GUIContent("Remove Interval (minutes)", 
-												"Time span between old backups removals."), 
-												remove, 1, MAX_REMOVE_MINUTES);
-			EditorGUI.EndDisabledGroup(); // RemoveEnabled
+			EditorGUI.BeginDisabledGroup(!DeleteEnabled);
+            delete = EditorGUILayout.IntSlider(new GUIContent("Delete backups interval (minutes)", 
+												"Time span between old backups deletion."), 
+												delete, 1, MAX_DELETE_MINUTES);
+			EditorGUI.EndDisabledGroup(); // DeleteEnabled
 			EditorGUI.EndDisabledGroup(); // AutoSaveEnabled
 
             GUILayout.Space(12);
 
-            if (GUILayout.Button(new GUIContent("Clean Backup Folder", "Remove all the backups from AutoSaves folder.")))
+            if (GUILayout.Button(new GUIContent("Clean backup folder", "Delete all the backups from AutoSaves folder.")))
             {
-                string title = "Clean Backup Folder";
+                string title = "Clean backup folder";
                 string message = "Do you really want to cleanup the backup folder? This action cannot be undone.";
-                if (EditorUtility.DisplayDialog(title, message, "OK", "Cancel"))
+                if (EditorUtility.DisplayDialog(title, message, "Yes", "No"))
                 {
                     message = CleanupFolder();
                     EditorUtility.DisplayDialog(title, message, "OK");
@@ -406,9 +454,9 @@ namespace Com.GameBang.Editor
                     SetFolder(folder);
                 }
 
-                if (save != SaveMinutes || backup != BackupMinutes || remove != RemoveMinutes)
+                if (save != SaveMinutes || backup != BackupMinutes || delete != DeleteMinutes)
                 {
-                    info = SetIntervals(save, backup, remove);
+                    info = SetIntervals(save, backup, delete);
                 }
 
                 if (en)
@@ -434,15 +482,30 @@ namespace Com.GameBang.Editor
                     }
                 }
 
+                if (splay != AutoSaveAfterPlay)
+                {
+                    AutoSaveAfterPlay = splay;
+                }
+
 				if (ben != BackupEnabled)
 				{
 					BackupEnabled = ben;
 				}
 
-				if (ren != RemoveEnabled)
+				if (den != DeleteEnabled)
 				{
-					RemoveEnabled = ren;
+					DeleteEnabled = den;
 				}
+
+                if (bg != EnabledInBackground)
+                {
+                    EnableBackground(bg);
+                }
+
+                if (log != LogInfo)
+                {
+                    LogInfo = log;
+                }
 
             }
 
@@ -471,9 +534,9 @@ namespace Com.GameBang.Editor
 				{
 					SaveBackupScene();
 					LastBackupTime = DateTime.Now;
-					if (RemoveEnabled)
+					if (DeleteEnabled)
 					{
-						RemoveOldBackups();
+						DeleteOldBackups();
 					}
 				}
             }
@@ -489,13 +552,7 @@ namespace Com.GameBang.Editor
             EditorApplication.update += OnUpdate;
             AutoSaveEnabled = true;
 
-            #if UNITY_EDITOR
-                if (Application.isEditor)
-                {
-                    // Enables the integration to work also when the Editor is running in background.
-                    Application.runInBackground = true;
-                }
-            #endif
+            EnableBackground(EnabledInBackground);
 
             return GetInfo();
         }
@@ -512,30 +569,39 @@ namespace Com.GameBang.Editor
             return GetInfo();
         }
 
+        /// <summary>
+        /// Enables the integration to work also when the Editor is running in background.
+        /// </summary>
+        /// <param name="_enabled"> If AutoSave has to be enabled in background. &#xD; </param>
+        static void EnableBackground(bool _enabled)
+        {
+            if (Application.isEditor)
+            {
+                Application.runInBackground = _enabled;
+                EnabledInBackground = _enabled;
+            }
+        }
+
 		/// <summary>
 		/// Sets time intervals between AutoSave calls.
 		/// </summary>
-		/// <param name="_save"> Minutes between each AutoSave. </param>
-		/// <param name="_backup"> Minutes between each scene backup. </param>
-		/// <param name="_remove"> Minutes that have to pass before a backup gets deleted. </param>
+		/// <param name="_save"> Minutes between each AutoSave. &#xD; </param>
+		/// <param name="_backup"> Minutes between each scene backup. &#xD; </param>
+		/// <param name="_delete"> Minutes that have to pass before a backup gets deleted. &#xD; </param>
 		/// <returns> Info message. </returns>
-        static string SetIntervals(int _save, int _backup, int _remove)
+        static string SetIntervals(int _save, int _backup, int _delete)
         {
-            string message;
-
             SaveMinutes = _save;
             BackupMinutes = _backup;
-            RemoveMinutes = _remove;
+            DeleteMinutes = _delete;
 
-            message = "\nAutoSave changed. \n";
-           
-            return message + GetIntervalsInfo();
+            return GetInfo();
         }
 
 		/// <summary>
 		/// Sets the AutoSaves folder path.
 		/// </summary>
-		/// <param name="_folder"> New folder path. </param>
+		/// <param name="_folder"> New folder path. &#xD; </param>
 		/// <returns> Info message. </returns>
         static string SetFolder(string _folder)
         {
@@ -582,12 +648,39 @@ namespace Com.GameBang.Editor
 
             if (!AutoSaveEnabled)
             {
-                return "\nAutoSave disabled.\n";
+                return "AutoSave disabled.\n";
             }
 
-            message = "\nAutoSave enabled.\n";
-            
-			return message + GetIntervalsInfo();
+            if (AutoSaveAfterPlay)
+            {
+                message = "AutoSave enabled. Saves scenes on Play.\n";
+            }
+            else
+            {
+                message = "AutoSave enabled. Doesn't save scenes on Play.\n";
+            }
+			
+            message += GetIntervalsInfo();
+
+            if (EnabledInBackground)
+            {
+                message += "AutoSave enabled when Editor is in background.\n";
+            }
+            else
+            {
+                message += "AutoSave disabled when Editor is in background.\n";
+            }
+
+            if (LogInfo)
+            {
+                message += "Log enabled.";
+            }
+            else
+            {
+                message += "Log disabled.";
+            }
+
+            return message;
 
         }
 
@@ -608,13 +701,13 @@ namespace Com.GameBang.Editor
 				message += "AutoBackup disabled.\n";
 			}
 			
-			if (RemoveEnabled)
+			if (DeleteEnabled)
 			{
-				message += "Backups will be deleted after " + RemoveMinutes + " minutes.\n";
+				message += "Backups will be deleted after " + DeleteMinutes + " minutes.\n";
 			}
 			else
 			{
-				message += "Backup removal disabled.\n";
+				message += "Auto-delete backups disabled.\n";
 			}
 
             return message;
@@ -639,6 +732,10 @@ namespace Com.GameBang.Editor
         {
             EditorSceneManager.SaveOpenScenes();
             AssetDatabase.SaveAssets();
+            if (LogInfo)
+            {
+                Debug.Log("[AutoSaveBackup] AutoSaved scenes.\n" + DateTime.Now);
+            }
         }
 
 		/// <summary>
@@ -656,12 +753,17 @@ namespace Com.GameBang.Editor
                 string newName = GetSceneBackupName(scene.path);
                 EditorSceneManager.SaveScene(scene, Path.Combine(SaveFolder, newName), true);
             }
+
+            if (LogInfo)
+            {
+                Debug.Log("[AutoSaveBackup] Scene backups saved in " + SaveFolder + ".\n" + DateTime.Now);
+            }
         }
 
 		/// <summary>
 		/// Deletes old scene backups from the AutoSaves folder.
 		/// </summary>
-        static void RemoveOldBackups()
+        static void DeleteOldBackups()
         {
             string[] files;
             files = Directory.GetFiles(SaveFolder, "*.unity");
@@ -675,16 +777,21 @@ namespace Com.GameBang.Editor
 				for (int i = 0; i < n; i++)
 				{
 					tempTime = File.GetCreationTime(files[i]);
-					if ((DateTime.Now - tempTime).TotalMinutes >= RemoveMinutes)
+					if ((DateTime.Now - tempTime).TotalMinutes >= DeleteMinutes)
 						File.Delete(files[i]);
 				}
 			}
+
+            if (LogInfo)
+            {
+                Debug.Log("[AutoSaveBackup] Deleted " + n + " old scene backups. \n" + DateTime.Now);
+            }
         }
 
 		/// <summary>
 		/// Adds timestamps to the name of the scene backup.
 		/// </summary>
-		/// <param name="_originalSceneName"> Name of the scene to format. </param>
+		/// <param name="_originalSceneName"> Name of the scene to format. &#xD; </param>
 		/// <returns> Name of the scene backup file. </returns>
         static string GetSceneBackupName(string _originalSceneName)
         {
