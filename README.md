@@ -43,7 +43,7 @@ This plugin includes the DesidusEditorUtility class that can be used and called 
 
 ## Authors
 [Desidus](https://www.desidus.it) - [Contact us](info@desidus.it)
-[Ettore Passaro](https://github.com/ximera)
+[Ettore Passaro](https://github.com/ximera91)
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
