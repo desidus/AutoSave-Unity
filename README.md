@@ -11,7 +11,7 @@ AutoSave plugin for Unity.
 - Enable/Disable activity logs.
 
 ## How does it work
-![alt text](https://imgur.com/EfeHtee)
+![](https://i.imgur.com/EfeHtee.png)
 
 - **Enable AutoSave** switches on and off the plugin.
 - **Save on Play** lets you save the open scenes when you press Play in the Editor.
@@ -20,7 +20,7 @@ AutoSave plugin for Unity.
 - **Popup timeout in seconds** how many seconds before the popup is closed and the scenes saved.
 - **AutoSave every # of minutes** is the minutes that have to pass between AutoSaves.
 
-![alt text](https://imgur.com/SfZT1LC)
+![](https://i.imgur.com/SfZT1LC.png)
 
 ## Install
 Just import the asset from the AssetStore and you're good to go.
@@ -28,7 +28,8 @@ By default every function is enabled on the first start.
 
 ## Advanced setup
 If you want to change the intervals maximum values, you must change them from the source code inside AutoSave.cs.
-![alt text](https://imgur.com/SzHOKr5)
+
+![](https://i.imgur.com/SzHOKr5.png)
 
 ## **Bonus** DesidusEditorUtility 
 This plugin includes the DesidusEditorUtility class that can be used and called inside Editor scripts.
@@ -43,6 +44,7 @@ This plugin includes the DesidusEditorUtility class that can be used and called 
 
 ## Authors
 [Desidus](https://www.desidus.it) - [Contact us](info@desidus.it)
+
 [Ettore Passaro](https://github.com/ximera91)
 
 ## License
