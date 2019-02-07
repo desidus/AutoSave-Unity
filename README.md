@@ -1,27 +1,26 @@
-# AutoSaveBackup
-Auto-save integration for Unity Editor with scene backup manager.
+# AutoSave for Unity
+AutoSave plugin for Unity.
 
 ## Features
-- Auto-save the changes you made to your scenes in the Editor.
-- Auto-save scenes when Play button is pressed.
-- Make scene backups and automatically delete them after a fixed time.
+- AutoSave the changes you made to your scenes in the Editor.
+- AutoSave scenes when Play button is pressed.
+- Confirmation popup to perform or skip AutoSave. 
 - Change the settings from the Preferences window.
 - Works with multiscene.
 - Works while the Unity Editor is running in background.
 - Enable/Disable activity logs.
 
 ## How does it work
-![alt text](http://i.imgur.com/A5eIFNR.png)
+![alt text](https://imgur.com/EfeHtee)
 
-The six toggles activate/deactivate each function of the integration, but, if **Enable AutoSave** is off, the whole integration will be stopped.
+- **Enable AutoSave** switches on and off the plugin.
+- **Save on Play** lets you save the open scenes when you press Play in the Editor.
+- **Run while Editor in background** executes the plugin while the Editor window is not focused. [This forces the whole Editor to run in background. Turn it off if you expecience performance loss on your pc]
+- **Show AutoSave popup** AutoSave shows a confirmation popup before saving.
+- **Popup timeout in seconds** how many seconds before the popup is closed and the scenes saved.
+- **AutoSave every # of minutes** is the minutes that have to pass between AutoSaves.
 
-The **AutoSave folder** must be inside the project folder or any of its subfolders.
-
-- **AutoSave interval** is the number of minutes that should pass between each AutoSave. It must be a value between 1 and 15.
-- **Scene backup interval** is the number of minutes that should pass between each scene backup. It must be a value between 1 and 30.
-- **Delete backups interval** is the number of minutes that should pass before an old backup gets deleted. It must be a value between 1 and 90.
-
-**Clean backup folder** button removes all the scene backups in the AutoSaves folder.
+![alt text](https://imgur.com/SfZT1LC)
 
 ## Install
 Just import the asset from the AssetStore and you're good to go.
@@ -29,13 +28,22 @@ By default every function is enabled on the first start.
 
 ## Advanced setup
 If you want to change the intervals maximum values, you must change them from the source code inside AutoSave.cs.
-![alt text](http://i.imgur.com/DL2gSPP.png)
+![alt text](https://imgur.com/SzHOKr5)
+
+## **Bonus** DesidusEditorUtility 
+This plugin includes the DesidusEditorUtility class that can be used and called inside Editor scripts.
+### Features
+- **EditBoundsButton()** draws an edit button like the one used for colliders inspectors.
+- **DisabledScriptField()** draws the field usually found at the top of MonoBehaviour inspectors with the component's class name.
+- **GetEditorMainWindowPos()** returns the Rect position of the main editor window.
+- **NavMeshAreaMaskField()** draws a mask field to select NavMesh areas, like the one found in the NavMeshAgent inspector.
 
 ## Built with
 [Unity](https://www.unity3d.com)
 
 ## Authors
-[GameBang](http://www.gamebang.it) - [Contact us](info@gamebang.it)
+[Desidus](https://www.desidus.it) - [Contact us](info@desidus.it)
+[Ettore Passaro](https://github.com/ximera)
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
