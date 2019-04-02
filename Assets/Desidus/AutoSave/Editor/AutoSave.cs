@@ -642,6 +642,7 @@ namespace It.Desidus.EditorExtensions
 			if (AutoSaveEnabled)
 			{
 				EditorApplication.update -= OnUpdate;
+				EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
 				AutoSaveEnabled = false;
 			}
 
